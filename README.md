@@ -6,7 +6,7 @@ Este projeto consiste em **Dashboards interativos** desenvolvidos em **Python + 
 
 ## Autor
 
-**[Lucas Willian Santos]**
+**Lucas Willian Santos**
 
 ---
 

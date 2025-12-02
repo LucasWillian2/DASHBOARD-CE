@@ -2,20 +2,32 @@
 
 ## 1. Objetivo do Projeto
 
-Desenvolver **Dashboards interativos** para gestores analisarem negócios em tempo real. Os dashboards atuais cobrem:
-- **Vendas**: Receita, produtos mais vendidos, série temporal de vendas
-- **Estoque**: Monitoramento de inventário, alertas de baixo estoque, recomendações de reposição
+Desenvolver **Dashboards interativos** para gestores analisarem negócios em tempo real. O projeto oferece:
 
-**Extensão Prevista**: Dashboard de Compras e Fornecedores para análise de desempenho de fornecedores, monitoramento de gastos e planejamento estratégico de compras.
+- **Super-Dashboard (Consolidado)**: Visão 360° integrada de Estoque, Vendas e Compras por produto
+  - Identificação de riscos (ruptura, excesso de estoque)
+  - Oportunidades de otimização (custo, lucratividade)
+  - Decisões estratégicas baseadas em dados consolidados
+
+- **Dashboards Individuais**: Análise isolada de cada fonte
+  - **Vendas**: Receita, produtos mais vendidos, série temporal de vendas
+  - **Estoque**: Monitoramento de inventário, alertas de baixo estoque, recomendações de reposição
+  - **Compras**: Comparativo de fornecedores, volume de compras mensal, produtos com maior gasto
 
 ---
 
 ## 2. Visão Geral da Arquitetura
 
-Este projeto contém **dashboards Streamlit independentes** para análise de negócios:
-- **Dashboard de Vendas**: Análise de receita, produtos mais vendidos, série temporal
-- **Dashboard de Estoque**: Monitoramento de inventário, alertas de baixo estoque, recomendações
-- **Dashboard de Compras** (futuro): Comparativo de fornecedores, volume de compras por mês, produtos com maior gasto
+Este projeto contém **um Super-Dashboard consolidado + 3 dashboards Streamlit individuais** para análise de negócios:
+
+- **Super-Dashboard (app/Super_Dashboard_Streamlit.py)**: Integração 360° de Estoque, Vendas e Compras
+  - Consolidação por produto
+  - Indicadores estratégicos integrados
+  - Visão unificada para decisões cross-funcionais
+
+- **Dashboard de Vendas** (app/Dashboard_Vendas_Streamlit.py): Análise isolada de receita, produtos mais vendidos, série temporal
+- **Dashboard de Estoque** (app/Dashboard_Estoque_Streamlit.py): Monitoramento de inventário, alertas, recomendações
+- **Dashboard de Compras** (app/Dashboard_Compras_Streamlit.py): Comparativo de fornecedores, volume mensal, top produtos
 
 Todos seguem o mesmo padrão arquitetural: **helpers de carga/processamento de dados + UI Streamlit com filtros dinâmicos + visualizações Plotly**.
 
@@ -26,6 +38,7 @@ Todos seguem o mesmo padrão arquitetural: **helpers de carga/processamento de d
 ### Estrutura de Arquivos
 ```
 app/
+  ├── Super_Dashboard_Streamlit.py       # Super-Dashboard consolidado (visão 360°)
   ├── Dashboard_Vendas_Streamlit.py       # Vendas com KPIs, série temporal, top 10
   ├── Dashboard_Estoque_Streamlit.py      # Estoque com alertas, valor total, recomendações
   └── Dashboard_Compras_Streamlit.py      # Compras com fornecedores, volume mensal, top produtos
@@ -59,6 +72,41 @@ docs/
 ---
 
 ## Convenções Projeto-Específicas
+
+### Super-Dashboard — Padrão de Consolidação
+
+O Super-Dashboard integra 3 fontes de dados através de consolidação por `product_name`:
+
+1. **Carregamento Independente**:
+   - `generate_sample_estoque()`: Cria 80 produtos com quantidade, min_stock, unit_cost
+   - `generate_sample_vendas()`: Cria eventos de venda com quantity, unit_price
+   - `generate_sample_compras()`: Cria eventos de compra com quantity, unit_price, delivery_days
+
+2. **Merge Consolidado**:
+   ```python
+   # Estoque base
+   df_consolidado = df_estoque[['product_name', 'category', 'supplier', 'quantity', 'min_stock', 'unit_cost']]
+   
+   # Merge com resumo de vendas (groupby product_name)
+   df_consolidado = df_consolidado.merge(vendas_resumo, on='product_name', how='left').fillna(0)
+   
+   # Merge com resumo de compras (groupby product_name)
+   df_consolidado = df_consolidado.merge(compras_resumo, on='product_name', how='left').fillna(0)
+   ```
+
+3. **Colunas Derivadas**:
+   - `valor_estoque = quantity * unit_cost`
+   - `receita_vendas = qty_vendida * unit_price` (agregado de vendas)
+   - `gasto_compras = qty_comprada * unit_price` (agregado de compras)
+   - `risco_ruptura = quantity < min_stock` (flag booleana)
+   - `excesso_estoque = quantity > (min_stock * 3)` (flag booleana)
+   - `lucratividade = receita_total - (qty_vendida * unit_cost)` (margem)
+
+4. **Filtros Multidimensionais**:
+   - Produtos selecionados → filtro em estoque, vendas, compras
+   - Categorias → filtro em estoque
+   - Lojas → filtro em vendas
+   - Período → date range em vendas e compras
 
 ### Formato de Dados Esperados
 
@@ -103,13 +151,16 @@ python -m venv venv
 venv\Scripts\activate
 pip install -r requirements.txt
 
-# Vendas
+# Super-Dashboard (Recomendado - visão consolidada 360°)
+streamlit run app/Super_Dashboard_Streamlit.py
+
+# Vendas (individual)
 streamlit run app/Dashboard_Vendas_Streamlit.py
 
-# Estoque
+# Estoque (individual)
 streamlit run app/Dashboard_Estoque_Streamlit.py
 
-# Compras e Fornecedores
+# Compras e Fornecedores (individual)
 streamlit run app/Dashboard_Compras_Streamlit.py
 ```
 
@@ -146,9 +197,9 @@ streamlit run app/Dashboard_Compras_Streamlit.py
 
 ---
 
-## Dashboard de Compras e Fornecedores (Roadmap)
+## Dashboard de Compras e Fornecedores (Implementado)
 
-### Requisitos Funcionais (Próxima Fase)
+### Requisitos Funcionais (Implementados)
 
 O novo dashboard deve incluir:
 

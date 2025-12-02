@@ -1,6 +1,6 @@
-# Dashboard de Análise de Vendas e Estoque — Streamlit
+# Dashboard de Análise de Vendas, Estoque e Compras — Streamlit
 
-Este projeto consiste em **Dashboards interativos** desenvolvidos em **Python + Streamlit** para análise de vendas e controle de estoque, permitindo que gestores visualizem tendências, produtos estratégicos, comportamento de demanda e níveis de inventário.
+Este projeto consiste em **Dashboards interativos** desenvolvidos em **Python + Streamlit** para análise de vendas, controle de estoque e gestão de compras, permitindo que gestores visualizem tendências, produtos estratégicos, comportamento de demanda, níveis de inventário e desempenho de fornecedores.
 
 ---
 
@@ -29,6 +29,16 @@ Este projeto consiste em **Dashboards interativos** desenvolvidos em **Python + 
 - Cálculo do valor total do inventário
 - Download dos dados filtrados
 - Recomendações rápidas para gestores
+
+### Dashboard de Compras e Fornecedores
+- Upload de arquivos CSV/XLSX com dados de compras
+- Filtros por fornecedor, produto e período
+- **Comparativo entre Fornecedores**: Preço médio vs Prazo médio de entrega (gráfico scatter)
+- **Volume de Compras por Mês**: Série temporal com gasto mensal
+- **Produtos com Maior Gasto**: Top 15 produtos por investimento acumulado
+- Indicadores: total gasto, quantidade comprada, fornecedores únicos, transações
+- Recomendações estratégicas para gestores
+- Download dos dados filtrados
 
 ---
 
@@ -99,6 +109,12 @@ streamlit run app/Dashboard_Vendas_Streamlit.py
 streamlit run app/Dashboard_Estoque_Streamlit.py
 ```
 
+### Dashboard de Compras e Fornecedores
+
+```bash
+streamlit run app/Dashboard_Compras_Streamlit.py
+```
+
 O navegador abrirá automaticamente em: **http://localhost:8501/**
 
 ---
@@ -127,6 +143,17 @@ O arquivo CSV/XLSX deve conter no mínimo as seguintes colunas:
 - `min_stock` - Estoque mínimo recomendado
 - `unit_cost` - Custo unitário
 - `last_update` - Data da última atualização
+
+### Dashboard de Compras e Fornecedores
+
+O arquivo CSV/XLSX deve conter no mínimo as seguintes colunas:
+
+- `date` - Data da compra
+- `supplier` - Nome do fornecedor
+- `product_name` - Nome do produto
+- `quantity` - Quantidade comprada
+- `unit_price` - Preço unitário da compra
+- `delivery_days` - Prazo de entrega em dias
 
 ---
 

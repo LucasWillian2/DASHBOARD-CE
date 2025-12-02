@@ -1,6 +1,6 @@
-# Manual de Execução — Dashboards de Vendas e Estoque
+# Manual de Execução — Dashboards de Vendas, Estoque e Compras
 
-Este manual fornece instruções detalhadas para executar e utilizar os dashboards de análise de vendas e controle de estoque.
+Este manual fornece instruções detalhadas para executar e utilizar os dashboards de análise de vendas, controle de estoque e compras com fornecedores.
 
 ---
 
@@ -11,6 +11,7 @@ Este manual fornece instruções detalhadas para executar e utilizar os dashboar
 3. [Executando os Dashboards](#3-executando-os-dashboards)
 4. [Dashboard de Vendas](#4-dashboard-de-vendas)
 5. [Dashboard de Estoque](#5-dashboard-de-estoque)
+6. [Dashboard de Compras e Fornecedores](#6-dashboard-de-compras-e-fornecedores)
 
 ---
 
@@ -81,6 +82,12 @@ streamlit run app/Dashboard_Vendas_Streamlit.py
 
 ```bash
 streamlit run app/Dashboard_Estoque_Streamlit.py
+```
+
+### Dashboard de Compras e Fornecedores
+
+```bash
+streamlit run app/Dashboard_Compras_Streamlit.py
 ```
 
 ### O que acontece?
@@ -174,5 +181,76 @@ O dashboard exibe:
 ### 5.4 Exportando Dados
 
 Clique no botão **"Baixar dados filtrados (CSV)"** para exportar os dados filtrados.
+
+---
+
+## 6. Dashboard de Compras e Fornecedores
+
+### 6.1 Objetivo
+
+Analisar desempenho de fornecedores, monitorar gastos e planejar compras estratégicas. Identifique fornecedores mais eficientes e otimize o volume de compras.
+
+### 6.2 Carregando Dados
+
+Você tem duas opções:
+
+1. **Usar dados de exemplo** (marcado por padrão)
+   - Dados de compras serão gerados automaticamente
+
+2. **Carregar seu próprio arquivo**
+   - Faça upload de um arquivo CSV/XLSX
+   - O arquivo deve conter as colunas: `date`, `supplier`, `product_name`, `quantity`, `unit_price`, `delivery_days`
+
+### 6.3 Aplicando Filtros
+
+Na barra lateral, você pode:
+
+- **Fornecedor(s)**: Selecione um ou mais fornecedores para análise
+- **Produto(s)**: Filtre por produtos específicos (opcional)
+- **Período**: Selecione o intervalo de datas desejado
+
+### 6.4 Visualizando Resultados
+
+O dashboard exibe:
+
+- **KPIs principais**: 
+  - Total gasto em compras
+  - Quantidade total comprada
+  - Fornecedores únicos
+  - Número de transações
+
+- **1️⃣ Comparativo entre Fornecedores**: 
+  - Gráfico scatter com preço médio vs prazo médio
+  - Tamanho das bolhas representa volume comprado
+  - Tabela com detalhes de cada fornecedor
+  - Identifique fornecedores mais eficientes em preço e prazo
+
+- **2️⃣ Volume de Compras por Mês**: 
+  - Gráfico de série temporal com gasto mensal
+  - Identifique períodos de maior/menor gasto
+  - Planeje compras futuras com base em tendências
+
+- **3️⃣ Produtos com Maior Gasto**: 
+  - Gráfico de barras com top 15 produtos
+  - Tabela interativa com ranking de investimento
+  - Identifique produtos estratégicos
+
+- **💡 Recomendações Estratégicas**: 
+  - Fornecedores com melhor preço
+  - Fornecedores com melhor prazo de entrega
+  - Oportunidades de redução de custos
+  - Planejamento de compras com base em histórico
+
+### 6.5 Decisões Apoiadas
+
+Com base nos dados apresentados, gestores podem:
+
+- **a) Escolher fornecedores mais eficientes**: Compare preço médio e prazo médio para identificar parceiros com melhor custo-benefício
+- **b) Planejar compras estratégicas**: Use histórico de gastos mensais para reduzir custos e otimizar volume
+- **c) Otimizar estoque**: Correlacione histórico de compras com níveis ideais de inventário
+
+### 6.6 Exportando Dados
+
+Clique no botão **"Baixar dados filtrados (CSV)"** para exportar os dados filtrados para análises adicionais.
 
 ---
